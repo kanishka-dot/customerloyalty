@@ -8,15 +8,6 @@ const initialState = {
    address:""
 }
 
-// export const fetchPosts = createAsyncThunk('posts/fetchPost', async () =>{
-//     try {
-//         const response = await axios.get("/asd/as");
-//         return response.data;
-//     } catch (error) {
-//         return error.message
-//     }
-// })
-
 export const createNewCustomer = createAsyncThunk('customer/createcustomer', async (payload) =>{
     try {
         const response =  await axios.post('customer/api/v1/createcustomer',
@@ -44,13 +35,13 @@ const customerSlice = createSlice({
             state.firstname = "";
             state.lastname ="";
             state.address ="";
-        },
-        handleFormSubmit:()=>{
-
         }
     },
     extraReducers(builder){
         builder.addCase(createNewCustomer.fulfilled,(state,action)=>{
+            state.firstname="";
+            state.lastname="";
+            state.address="";
            console.log("User created sucessfully");
         })
 

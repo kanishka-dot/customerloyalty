@@ -9,7 +9,7 @@ export default function LoyaltyForm({handelTextChange, onPointAdd, onPointsDeduc
         <Row>
           {InputFieldParameter.map((input) => (
             <Col md={6} key={input.id}>
-              <InputField key={input.id} fieldParameter={input} errorMessage={input.errorMessage} fieldValue={fieldValue[input.name]}
+              <InputField key={input.id} fieldParameter={input} errorMessage={input.errorMessage} fieldValue={fieldValue}
                 handelTextChange={handelTextChange} fieldReset={formReset} selectFieldValues={selectOption}/>
             </Col>
           ))}

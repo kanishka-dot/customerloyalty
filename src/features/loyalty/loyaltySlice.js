@@ -18,18 +18,26 @@ const initialState = {
     }
 })
 
-export const addCustomerPoints = createAsyncThunk('loyalty/addLoyaltyPoints', async () =>{
+export const addCustomerPoints = createAsyncThunk('loyalty/addLoyaltyPoints', async (payload) =>{
    try {
-       const response = await axios.get("/loyalty/api/v1/addLoyaltyPoints");
+       const response = await axios.post("/loyalty/api/v1/addLoyaltyPoints",{
+        id:payload.customerId,
+        pointAdd:payload.points,
+        pointDeduct:0
+       });
        return response.data;
    } catch (error) {
        return error.message
    }
 })
  
-export const deductCustomerPoints = createAsyncThunk('loyalty/deductLoyalty', async () =>{
+export const deductCustomerPoints = createAsyncThunk('loyalty/deductLoyalty', async (payload) =>{
    try {
-       const response = await axios.get("/loyalty/api/v1/deductLoyaltyPoints");
+       const response = await axios.post("/loyalty/api/v1/deductLoyaltyPoints",{
+        id:payload.customerId,
+        pointAdd:0,
+        pointDeduct:payload.points
+       });
        return response.data;
    } catch (error) {
        return error.message
@@ -60,10 +68,12 @@ export const deductCustomerPoints = createAsyncThunk('loyalty/deductLoyalty', as
          state.customers = [];
       })
       .addCase(addCustomerPoints.fulfilled,(state)=>{
-
+        state.points = 0;
+        console.log("Points added sucessfully");
       })
       .addCase(deductCustomerPoints.fulfilled,(state)=>{
-         
+        state.points = 0
+        console.log("Points deducted sucessfully");
       })
   }
  })
