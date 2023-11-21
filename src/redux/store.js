@@ -1,9 +1,10 @@
 import {configureStore } from '@reduxjs/toolkit'
-import counterReducer from "./counter"
-
+import customerReducer from '../features/customer/customerSlice'
+import loyaltyReducer from '../features/loyalty/loyaltySlice'
 
 export default configureStore ({
     reducer:{
-        counter: counterReducer
+        customer:customerReducer,
+        loyalty:loyaltyReducer
     }
 })

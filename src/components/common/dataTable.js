@@ -3,6 +3,7 @@ import { Table } from 'reactstrap';
 
 
 export default function DataTable({tableCol, tableData, tableParameter}) {
+    console.log(tableData);
       return (
         <Table
             bordered

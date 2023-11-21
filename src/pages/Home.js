@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UncontrolledAccordion, AccordionBody, AccordionHeader, AccordionItem, Alert, Button } from 'reactstrap';
-import Customer from '../customer/customer';
-import Loyalty from '../loyalty/loyalty';
+import Customer from '../components/customer/Customer';
+import Loyalty from '../components/loyalty/Loyalty';
 function Home(props) {
 
     const [alert, setAlert] = useState({

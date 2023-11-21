@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/axios'
+import api from '../../api/axios.js'
 // import DataTable from '../common/DataTable.js';
 import { InputFieldParameter} from './customerParaInputs.js'
-import CustomerForm from '../customer/customerForm';
-
+import CustomerForm from './CustomerForm.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { handleTextChange,handleFieldReset,createNewCustomer } from '../../features/customer/customerSlice.js';
 export default function Customer() {
 
-  const initState = {
-    id: "",
-    firstname: "",
-    lastname: "",
-    address: "",
-  }
+  const custFieldValues = useSelector((state)=>state.customer)
+  const dispatch = useDispatch()
+ 
 
-  const [customerInfo, setcustomerInfo] = useState(initState)
   const [formReset, setFormReset] = useState(false);
   const [classes, setClasses] = useState([]);
-  // const [student, setstudent] = useState([]);
-  const [formsumbit, setformsumbit] = useState("Save");
+
+
 
 
   // useEffect(() => {
@@ -31,15 +28,36 @@ export default function Customer() {
   // }, []);
 
 
-  function handelTextChange(e) {
-    setcustomerInfo({ ...customerInfo, [e.target.name]: e.target.value });
+  // function handelTextChange(e) {
+  //   dispatch(handleTextChange({
+  //     name:e.target.name,
+  //     value:e.target.value
+  //   }))
+  // }
+
+  const  handelTextChange = (e) =>{
+    dispatch(handleTextChange({
+      name:e.target.name,
+      value:e.target.value
+    }))
   }
 
-  function handleReset(e) {
-    setcustomerInfo(initState);
+  const handleReset = (e) =>{
+    dispatch(handleFieldReset())
     setFormReset(!formReset)
-    setformsumbit("Save")
   }
+
+
+  const handleFormSubmit = async (e) =>{
+    e.preventDefault()
+    try {
+     dispatch(createNewCustomer(custFieldValues)).unwrap()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 
   // async function getClasseRooms() {
   //   await api.get("/api/Classrooms")
@@ -172,56 +190,58 @@ export default function Customer() {
   // }
 
 
-  async function createStudent() {
-    try {
-      // const classId = await getClassId(customerInfo.classroom);
-      const request = {
-        firstname: customerInfo.firstname,
-        lastname: customerInfo.lastname,
-        address: customerInfo.address,
-      }
-      console.log(request);
-      let response = await api.post("/api/Students", request);
-      if (response.status === 201) {
+  // async function createStudent() {
+  //   try {
+  //     // const classId = await getClassId(customerInfo.classroom);
+  //     const request = {
+  //       firstname: customerInfo.firstname,
+  //       lastname: customerInfo.lastname,
+  //       address: customerInfo.address,
+  //     }
+  //     console.log(request);
+  //     let response = await api.post("/api/Students", request);
+  //     if (response.status === 201) {
       
-        handleReset()
-      }
-    } catch (error) {
+  //       handleReset()
+  //     }
+  //   } catch (error) {
       
-    }
-  }
+  //   }
+  // }
 
 
 
 
-  function onSubmitForm(e) {
-    e.preventDefault();
-    if (validateAllFields()) {
-      if(formsumbit === "Save"){
-        createStudent();
-      }else{
-        // updateSelectedStudentData();
-      }  
-    } else {
+  // function onSubmitForm(e) {
+  //   e.preventDefault();
+  //   if (validateAllFields()) {
+  //     if(formsumbit === "Save"){
+  //       createStudent();
+  //     }else{
+  //       // updateSelectedStudentData();
+  //     }  
+  //   } else {
      
-    }
-  }
+  //   }
+  // }
 
-  function validateAllFields() { // validate  all required  fields updated
-    for (let index = 0; index < InputFieldParameter.length; index++) {
-      if (InputFieldParameter[index].required) {
-        if (customerInfo[InputFieldParameter[index].name] === "") {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+
+
+  // function validateAllFields() { // validate  all required  fields updated
+  //   for (let index = 0; index < InputFieldParameter.length; index++) {
+  //     if (InputFieldParameter[index].required) {
+  //       if (customerInfo[InputFieldParameter[index].name] === "") {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  //   return true;
+  // }
 
 
   return (
-    <CustomerForm formsumbit={formsumbit} handelTextChange={handelTextChange} onSubmitForm={onSubmitForm} handleReset={handleReset}
-    InputFieldParameter={InputFieldParameter} customerInfo={customerInfo} formReset={formReset} classes={classes} />
+    <CustomerForm handelTextChange={handelTextChange} onSubmitForm={handleFormSubmit} handleReset={handleReset}
+    InputFieldParameter={InputFieldParameter} fieldValue={custFieldValues} formReset={formReset} classes={classes} />
   );
 }
 
